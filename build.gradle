@@ -2,23 +2,28 @@
 buildscript {
     ext.kotlin_version = "1.5.10"
     repositories {
+        jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
         google()
-        mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath Libraries.agp
+        classpath Libraries.kotlinGradlePlugin
+        classpath Libraries.googleServices
+        classpath Libraries.safeArgs
+        classpath Libraries.fabricToolsGradle
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
     }
 }
 
 allprojects {
     repositories {
         google()
-        mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://maven.google.com/' }
+        maven { url 'https://jitpack.io' }
+        jcenter()
     }
 }
 
