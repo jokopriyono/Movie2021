@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Movie2021</string>
+    <string name="home">Home</string>
+    <string name="popular">Popular</string>
+    <string name="favorites">Favorites</string>
+    <string name="detail">Detail</string>
 </resources>

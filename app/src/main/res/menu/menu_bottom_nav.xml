@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragmentDestination"
+        android:icon="@drawable/ic_home_white"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/libraryFragmentDestination"
+        android:icon="@drawable/ic_popular_white"
+        android:title="@string/popular" />
+
+    <item
+        android:id="@+id/inTheatresFragmentDestination"
+        android:icon="@drawable/ic_favorite_white"
+        android:title="@string/favorites"/>
+
+    <item
+        android:id="@+id/loggedOutFragmentDestination"
+        android:icon="@drawable/ic_detail_white"
+        android:title="@string/detail" />
+</menu>

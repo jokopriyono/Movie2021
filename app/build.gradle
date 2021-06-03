@@ -1,20 +1,26 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id "androidx.navigation.safeargs.kotlin"
+}
+
+// For Epoxy
+kapt {
+    correctErrorTypes = true
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-
+    compileSdkVersion BuildConfig.compileSdk
     defaultConfig {
-        applicationId "com.joko.movie2021"
-        minSdkVersion 22
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
+        applicationId BuildConfig.applicationId
+        minSdkVersion BuildConfig.minSdk
+        targetSdkVersion BuildConfig.targetSdk
+        versionCode BuildConfig.versionCode
+        versionName BuildConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -23,6 +29,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    androidExtensions {
+        experimental = true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,16 +39,41 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation Libraries.kotlinStdlib
+
+    implementation Libraries.appCompat
+    implementation Libraries.constraintLayout
+    implementation Libraries.lifecycle
+    implementation Libraries.material
+    implementation Libraries.coreKtx
+    implementation Libraries.preference
+
+    implementation Libraries.navigation
+    implementation Libraries.navigationUi
+
+    implementation Libraries.koinAndroid
+    implementation Libraries.koinScope
+    implementation Libraries.koinViewModel
+
+    implementation Libraries.rxJava
+    implementation Libraries.rxAndroid
+    implementation Libraries.rxKotlin
+    implementation Libraries.rxBinding
+    implementation Libraries.rxRelay
+
+    implementation Libraries.epoxy
+    kapt Libraries.epoxyProcessor
+
+    testImplementation Libraries.junit
+    testImplementation Libraries.mockitoCore
+    androidTestImplementation Libraries.androidxTestRunner
+    androidTestImplementation Libraries.espressoCore
 }
