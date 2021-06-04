@@ -4,4 +4,6 @@
     <string name="popular">Popular</string>
     <string name="favorites">Favorites</string>
     <string name="detail">Detail</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="coming_soon">Coming Soon</string>
 </resources>

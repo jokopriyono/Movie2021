@@ -5,4 +5,10 @@
     android:id="@+id/nav_graph_logged_in"
     app:startDestination="@id/homeFragmentDestination">
 
+    <fragment
+        android:id="@+id/homeFragmentDestination"
+        android:name="com.joko.movie2021.ui.main.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+    </fragment>
 </navigation>
