@@ -10,5 +10,40 @@
         android:name="com.joko.movie2021.ui.main.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/viewMovieDetails"
+            app:destination="@id/movieDetailsFragment"
+            app:enterAnim="@animator/fade_in_short"
+            app:exitAnim="@animator/fade_out_short"
+            app:popExitAnim="@animator/fade_out_short" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFragmentDestination"
+        android:name="com.joko.movie2021.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/viewMovieDetails"
+            app:destination="@id/movieDetailsFragment"
+            app:enterAnim="@animator/fade_in_short"
+            app:exitAnim="@animator/fade_out_short" />
+    </fragment>
+    <fragment
+        android:id="@+id/popularFragmentDestination"
+        android:name="com.joko.movie2021.ui.popular.PopularFragment"
+        android:label="fragment_popular"
+        tools:layout="@layout/fragment_popular">
+        <action
+            android:id="@+id/viewMovieDetails"
+            app:destination="@id/movieDetailsFragment"
+            app:enterAnim="@animator/fade_in_short"
+            app:exitAnim="@animator/fade_out_short" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.joko.movie2021.ui.moviedetail.MovieDetailFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details">
+
     </fragment>
 </navigation>
