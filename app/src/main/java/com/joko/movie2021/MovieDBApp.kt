@@ -36,9 +36,11 @@ class MovieDBApp : Application() {
     }
 
     private fun leftRotation(arr: List<Int>, numOfRotation: Int): List<Int> {
+        var rotate = numOfRotation
+        if (numOfRotation > arr.size) rotate = numOfRotation % arr.size
         val temp = arr.toMutableList()
         val cut = mutableListOf<Int>()
-        for (i in 0 until numOfRotation) cut.add(temp.removeAt(0))
+        for (i in 0 until rotate) cut.add(temp.removeAt(0))
         temp.addAll(cut)
         return temp
     }
