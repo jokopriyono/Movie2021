@@ -47,6 +47,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    implementation project(path: ':core')
+    implementation project(path: ':repository')
+    implementation project(path: ':mvrxlite')
+
     implementation Libraries.kotlinStdlib
 
     implementation Libraries.appCompat
@@ -68,6 +72,9 @@ dependencies {
     implementation Libraries.rxKotlin
     implementation Libraries.rxBinding
     implementation Libraries.rxRelay
+
+    implementation Libraries.glide
+    kapt Libraries.glideCompiler
 
     implementation Libraries.epoxy
     kapt Libraries.epoxyProcessor

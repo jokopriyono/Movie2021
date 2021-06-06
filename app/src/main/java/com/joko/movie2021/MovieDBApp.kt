@@ -1,23 +1,31 @@
 package com.joko.movie2021
 
 import android.app.Application
+import com.joko.movie2021.di.applicationModule
+import com.joko.movie2021.di.uiModule
+import com.joko.movie2021.repository.apiModule
+import com.joko.movie2021.repository.databaseModule
+import com.joko.movie2021.repository.repositoryModule
+import com.joko.movie2021.repository.retrofitModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class MovieDBApp : Application() {
     override fun onCreate() {
         super.onCreate()
-//        startKoin {
-//            androidContext(this@MovieDBApp.applicationContext)
-//            modules(
-//                listOf(
-//                    applicationModule,
-//                    retrofitModule,
-//                    apiModule,
-//                    uiModule,
-//                    databaseModule,
-//                    repositoryModule
-//                )
-//            )
-//        }
+        startKoin {
+            androidContext(this@MovieDBApp.applicationContext)
+            modules(
+                listOf(
+                    applicationModule,
+                    retrofitModule,
+                    apiModule,
+                    uiModule,
+                    databaseModule,
+                    repositoryModule
+                )
+            )
+        }
 
         // ====Run left rotation=======================================
         val arr = listOf(2, 3, 5, 1, 2, 3, 9, 8)

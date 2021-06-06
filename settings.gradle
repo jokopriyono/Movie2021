@@ -1,2 +1,5 @@
 rootProject.name = "Movie2021"
 include ':app'
+include ':repository'
+include ':core'
+include ':mvrxlite'

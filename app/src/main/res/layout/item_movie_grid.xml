@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ivPoster"
+    android:layout_width="102dp"
+    android:layout_height="157dp"
+    android:background="@color/colorSurface"
+    android:contentDescription="@string/app_name"
+    android:foreground="?attr/selectableItemBackground"
+    android:scaleType="centerCrop"
+    tools:ignore="UnusedAttribute"
+    tools:srcCompat="@tools:sample/avatars" />
