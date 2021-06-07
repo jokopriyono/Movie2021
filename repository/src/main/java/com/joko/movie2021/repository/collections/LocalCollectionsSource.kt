@@ -16,7 +16,7 @@ internal class LocalCollectionsSource(
             CollectionType.Favourite -> collectionsDao.getFavouriteMoviesFlowable()
             CollectionType.Watchlist -> collectionsDao.getWatchlistedMoviesFlowable()
             CollectionType.Popular -> collectionsDao.getPopularMoviesFlowable()
-            CollectionType.TopRated -> collectionsDao.getTopRatedMoviesFlowable()
+            CollectionType.Upcoming -> collectionsDao.getUpcomingMoviesFlowable()
             CollectionType.InTheatres -> collectionsDao.getMoviesInTheatresFlowable()
         }
     }
@@ -26,7 +26,7 @@ internal class LocalCollectionsSource(
             CollectionType.Favourite -> collectionsDao.getFavouriteMovies()
             CollectionType.Watchlist -> collectionsDao.getWatchlistedMovies()
             CollectionType.Popular -> collectionsDao.getPopularMovies()
-            CollectionType.TopRated -> collectionsDao.getTopRatedMovies()
+            CollectionType.Upcoming -> collectionsDao.getUpcomingMovies()
             CollectionType.InTheatres -> collectionsDao.getMoviesInTheatres()
         }
     }

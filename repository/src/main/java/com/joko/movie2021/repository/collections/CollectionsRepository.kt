@@ -34,7 +34,7 @@ class CollectionsRepository internal constructor(
                                     response.data.movies ?: emptyList()
                                 )
                                 is Resource.Error -> Resource.Error(response.errorMessage)
-                                is Resource.Loading -> Resource.Loading<List<Movie>>()
+                                is Resource.Loading -> Resource.Loading()
                             }
                         )
                     }

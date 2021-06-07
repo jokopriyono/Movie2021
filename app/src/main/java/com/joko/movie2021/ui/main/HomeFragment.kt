@@ -61,7 +61,7 @@ class HomeFragment :
     override val initialState: UIState by lazy {
         UIState.HomeScreenState(
             popularMoviesResource = Resource.Loading(),
-            topRatedMoviesResource = Resource.Loading(),
+            upcomingMoviesResource = Resource.Loading(),
             searchResultsResource = null
         )
     }
@@ -83,7 +83,7 @@ class HomeFragment :
             })
 
             forceRefreshCollection(CollectionType.Popular)
-            forceRefreshCollection(CollectionType.TopRated)
+            forceRefreshCollection(CollectionType.Upcoming)
         }
         mainViewModel.setBackPressListener(this)
     }
@@ -110,6 +110,9 @@ class HomeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_popular.apply {
+            setController(homeEpoxyController)
+        }
+        recycler_coming.apply {
             setController(homeEpoxyController)
         }
         (view.parent as ViewGroup).doOnPreDraw {

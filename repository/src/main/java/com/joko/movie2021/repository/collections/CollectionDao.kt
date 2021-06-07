@@ -20,11 +20,11 @@ internal interface CollectionDao {
     @Query("SELECT *FROM collections WHERE name = '${CollectionNames.WATCHLIST_NAME}'")
     fun getWatchlistedMovies(): Single<Collection>
 
-    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.TOP_RATED_NAME}'")
-    fun getTopRatedMoviesFlowable(): Flowable<Collection>
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.UPCOMING_NAME}'")
+    fun getUpcomingMoviesFlowable(): Flowable<Collection>
 
-    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.TOP_RATED_NAME}'")
-    fun getTopRatedMovies(): Single<Collection>
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.UPCOMING_NAME}'")
+    fun getUpcomingMovies(): Single<Collection>
 
     @Query("SELECT * FROM collections WHERE name = '${CollectionNames.POPULAR_NAME}'")
     fun getPopularMoviesFlowable(): Flowable<Collection>

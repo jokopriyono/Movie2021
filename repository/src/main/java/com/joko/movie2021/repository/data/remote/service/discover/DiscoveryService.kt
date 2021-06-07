@@ -32,4 +32,7 @@ internal interface DiscoveryService {
     @GET("movie/top_rated")
     fun getTopRatedMovies(): Deferred<NetworkResponse<DiscoverMoviesResponse, ErrorResponse>>
 
+    @GET("movie/upcoming")
+    fun getUpcomingMovies(): Deferred<NetworkResponse<DiscoverMoviesResponse, ErrorResponse>>
+
 }

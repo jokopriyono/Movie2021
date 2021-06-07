@@ -23,7 +23,7 @@ internal class RemoteCollectionsSource(
             CollectionType.Favourite -> getFavouritesCollection(accountId)
             CollectionType.Watchlist -> getWatchlistedCollection(accountId)
             CollectionType.Popular -> getPopularCollection()
-            CollectionType.TopRated -> getTopRatedCollection()
+            CollectionType.Upcoming -> getUpcomingCollection()
             CollectionType.InTheatres -> getInTheatresCollection(region)
         }
     }
@@ -43,9 +43,7 @@ internal class RemoteCollectionsSource(
                         )
                     }
                     is NetworkResponse.ServerError -> {
-                        Resource.Error<Collection>(
-                            response.body?.statusMessage ?: "Server Error"
-                        )
+                        Resource.Error(response.body?.statusMessage ?: "Server Error")
                     }
                     is NetworkResponse.NetworkError -> {
                         Resource.Error(response.error.localizedMessage ?: "Network Error")
@@ -70,9 +68,7 @@ internal class RemoteCollectionsSource(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<Collection>(
-                                response.body?.statusMessage ?: "Server Error"
-                            )
+                            Resource.Error(response.body?.statusMessage ?: "Server Error")
                         }
                         is NetworkResponse.NetworkError -> {
                             Resource.Error(response.error.localizedMessage ?: "Network Error")
@@ -97,9 +93,7 @@ internal class RemoteCollectionsSource(
                         )
                     }
                     is NetworkResponse.ServerError -> {
-                        Resource.Error<Collection>(
-                            response.body?.statusMessage ?: "Server Error"
-                        )
+                        Resource.Error(response.body?.statusMessage ?: "Server Error")
                     }
                     is NetworkResponse.NetworkError -> {
                         Resource.Error(response.error.localizedMessage ?: "Network Error")
@@ -109,27 +103,25 @@ internal class RemoteCollectionsSource(
             }
     }
 
-    private fun getTopRatedCollection(): Single<Resource<Collection>> {
-        return discoveryService.getTopRatedMovies().asSingle(Dispatchers.Default)
+    private fun getUpcomingCollection(): Single<Resource<Collection>> {
+        return discoveryService.getPopularMovies().asSingle(Dispatchers.Default)
             .flatMap { response ->
                 Single.just(when (response) {
                     is NetworkResponse.Success -> {
                         Resource.Success(
                             Collection(
-                                CollectionType.TopRated.name,
-                                response.body.results.map { it.id })
-                                .apply {
-                                    movies = response.body.results.map { it.toMovie() }
-                                }
+                                CollectionType.Upcoming.name,
+                                response.body.results.map { it.id }
+                            ).apply {
+                                this.movies = response.body.results.map { it.toMovie() }
+                            }
                         )
                     }
                     is NetworkResponse.ServerError -> {
-                        Resource.Error<Collection>(
-                            response.body?.statusMessage ?: "Server Error"
-                        )
+                        Resource.Error(response.body?.statusMessage ?: "Server Error")
                     }
                     is NetworkResponse.NetworkError -> {
-                        Resource.Error(response.error.localizedMessage ?: "Server Error")
+                        Resource.Error(response.error.localizedMessage ?: "Network Error")
                     }
                 }
                 )

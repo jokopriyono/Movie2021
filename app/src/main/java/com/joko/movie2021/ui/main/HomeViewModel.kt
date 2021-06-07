@@ -29,9 +29,10 @@ class HomeViewModel(
 
     init {
         getPopularMovies()
+        getUpcomingMovies()
     }
 
-    fun getPopularMovies() {
+    private fun getPopularMovies() {
         collectionsRepository.getCollectionFlowable(type = CollectionType.Popular)
             .init(compositeDisposable)
             .subscribeOn(Schedulers.io())
@@ -40,6 +41,19 @@ class HomeViewModel(
                     setState { copy(popularMoviesResource = popularMovies) }
                 },
                 onError = { error -> handleError(error, "get-popular-movies") }
+            )
+            .disposeWith(compositeDisposable)
+    }
+
+    private fun getUpcomingMovies() {
+        collectionsRepository.getCollectionFlowable(type = CollectionType.Upcoming)
+            .init(compositeDisposable)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onNext = { upcomingMovies ->
+                    setState { copy(upcomingMoviesResource = upcomingMovies) }
+                },
+                onError = { error -> handleError(error, "get-upcoming-movies") }
             )
             .disposeWith(compositeDisposable)
     }

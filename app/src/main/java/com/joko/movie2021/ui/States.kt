@@ -11,7 +11,7 @@ sealed class UIState : MVRxLiteState {
 
     data class HomeScreenState(
         val popularMoviesResource: Resource<List<Movie>>,
-        val topRatedMoviesResource: Resource<List<Movie>>,
+        val upcomingMoviesResource: Resource<List<Movie>>,
         val searchResultsResource: Resource<List<Movie>>?
     ) : UIState()
 
