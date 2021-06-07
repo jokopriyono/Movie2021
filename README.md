@@ -5,5 +5,5 @@ First test is to create an application from the movie DB API. Please clone and b
 
 Second test is an algorithm implementation. I put the code in the MovieDBApp.kt file, please correct me if i'm wrong.
 
-> Project ini terinspirasi dari repository [Kshitij Chauhan](https://github.com/haroldadmin/MovieDB)
+> This project adapts the repository [Kshitij Chauhan](https://github.com/haroldadmin/MovieDB)
 > Left rotation learning reference from [GeeksforGeeks](https://www.geeksforgeeks.org/array-rotation/)
