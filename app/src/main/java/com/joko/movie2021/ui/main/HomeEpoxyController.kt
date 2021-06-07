@@ -30,7 +30,8 @@ class HomeEpoxyController(
     ) {
         when (popularMovies) {
             is Resource.Success -> {
-                popularMovies.data.forEach { popularMovie ->
+                val showTenOnly = popularMovies.data.subList(0, 10)
+                showTenOnly.forEach { popularMovie ->
                     movie {
                         id(popularMovie.id)
                         movieId(popularMovie.id)

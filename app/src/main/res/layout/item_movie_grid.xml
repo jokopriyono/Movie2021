@@ -2,9 +2,11 @@
 
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ivPoster"
+    android:id="@+id/img_movie"
     android:layout_width="102dp"
     android:layout_height="157dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
     android:background="@color/colorSurface"
     android:contentDescription="@string/app_name"
     android:foreground="?attr/selectableItemBackground"

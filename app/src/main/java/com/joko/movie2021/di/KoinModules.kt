@@ -14,6 +14,8 @@ import com.joko.movie2021.ui.common.EpoxyCallbacks
 import com.joko.movie2021.ui.main.HomeEpoxyController
 import com.joko.movie2021.ui.main.HomeViewModel
 import com.joko.movie2021.ui.main.MainViewModel
+import com.joko.movie2021.ui.moviedetail.MovieDetailEpoxyController
+import com.joko.movie2021.ui.moviedetail.MovieDetailViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -33,6 +35,9 @@ val uiModule = module {
     viewModel { (initialState: UIState.HomeScreenState) ->
         HomeViewModel(get(), get(), initialState)
     }
+    viewModel { (movieId: Int, initialState: UIState.DetailsScreenState) ->
+        MovieDetailViewModel(movieId, get(), initialState)
+    }
 
     viewModel { MainViewModel(get()) }
 
@@ -46,6 +51,10 @@ val uiModule = module {
 
     factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
         HomeEpoxyController(callbacks, glide, get(named("epoxy-handler")))
+    }
+
+    factory { (callbacks: MovieDetailEpoxyController.MovieDetailsCallbacks, glide: RequestManager) ->
+        MovieDetailEpoxyController(callbacks, glide, get(named("epoxy-handler")))
     }
 
     single(named("epoxy-handler-thread")) {

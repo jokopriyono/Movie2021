@@ -37,7 +37,6 @@
         android:layout_gravity="bottom"
         app:elevation="4dp"
         app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@color/colorSecondary"
         app:itemTextColor="@android:color/white"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_nav" />

@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxrelay2.PublishRelay
 import com.joko.movie2021.R
 import com.joko.movie2021.core.Resource
-import com.joko.movie2021.core.extensions.getNumberOfColumns
 import com.joko.movie2021.mvrxlite.MVRxLiteView
 import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.ui.BaseFragment
@@ -37,15 +37,14 @@ class HomeFragment :
     private val callbacks = object : EpoxyCallbacks {
         override fun onMovieItemClicked(id: Int, transitionName: String, sharedView: View?) {
             // TODO item clicked
-            /*val action = HomeFragmentDirections.viewMovieDetails(
+            val action = HomeFragmentDirections.viewMovieDetails(
                 movieIdArg = id,
-                isAuthenticatedArg = mainViewModel.isAuthenticated,
                 transitionNameArg = transitionName
             )
             sharedView?.let {
                 val extras = FragmentNavigatorExtras(sharedView to transitionName)
                 findNavController().navigate(action, extras)
-            } ?: findNavController().navigate(action)*/
+            } ?: findNavController().navigate(action)
         }
     }
 
@@ -111,10 +110,6 @@ class HomeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_popular.apply {
-            val columns = resources.getDimension(R.dimen.movie_grid_poster_width)
-                .getNumberOfColumns(context!!)
-            val space = resources.getDimension(R.dimen.movie_grid_item_space)
-            layoutManager = GridLayoutManager(context, columns)
             setController(homeEpoxyController)
         }
         (view.parent as ViewGroup).doOnPreDraw {

@@ -45,5 +45,14 @@
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details">
 
+        <argument
+            android:name="movieIdArg"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="transitionNameArg"
+            android:defaultValue=" "
+            app:argType="string" />
     </fragment>
 </navigation>

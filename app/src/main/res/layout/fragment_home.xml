@@ -66,7 +66,7 @@
         android:id="@+id/recycler_popular"
         android:layout_width="match_parent"
         android:layout_height="157dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/title_popular"
         tools:listitem="@layout/item_movie_grid" />
@@ -87,7 +87,7 @@
         android:id="@+id/recycler_coming"
         android:layout_width="match_parent"
         android:layout_height="157dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/title_coming"
         tools:listitem="@layout/item_movie_grid" />
