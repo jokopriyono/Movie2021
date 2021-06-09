@@ -52,6 +52,6 @@ fun <T> List<T>?.firstOrDefault(default: T): T {
     return this?.firstOrNull() ?: default
 }
 
-fun Date.format(pattern: String) = SimpleDateFormat(pattern).format(this)
+fun Date.format(pattern: String) = SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
 fun Number?.format(pattern: String) = String.format(pattern, this)

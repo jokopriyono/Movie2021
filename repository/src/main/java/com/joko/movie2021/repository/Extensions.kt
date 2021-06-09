@@ -27,7 +27,8 @@ internal fun GeneralMovieResponse.toMovie(): Movie {
         null,
         null,
         null,
-        isModelComplete = false
+        isModelComplete = false,
+        null
     )
 }
 
@@ -45,7 +46,8 @@ internal fun MovieResponse.toMovie(): Movie {
         budget = this.budget,
         revenue = this.revenue,
         genres = this.genres.map { genrePair -> genrePair.name },
-        isModelComplete = true
+        isModelComplete = true,
+        duration = this.runtime
     )
 }
 

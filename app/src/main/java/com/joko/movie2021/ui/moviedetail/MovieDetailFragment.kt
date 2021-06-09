@@ -6,6 +6,7 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
 import com.joko.movie2021.R
 import com.joko.movie2021.core.Resource
+import com.joko.movie2021.core.extensions.gone
 import com.joko.movie2021.core.extensions.safe
 import com.joko.movie2021.mvrxlite.MVRxLiteView
 import com.joko.movie2021.ui.BaseFragment
@@ -157,12 +159,27 @@ class MovieDetailFragment : BaseFragment(), MVRxLiteView<UIState.DetailsScreenSt
                     .into(img_movie)
 
                 txt_title.text = movie.title
-                movie.genres?.map {
+                linear_genre.removeAllViews()
+                movie.genres?.mapIndexed { idx, text ->
                     val tv = TextView(context)
-                    tv.text = it
+                    tv.text = text
                     linear_genre.addView(tv)
+                    if (idx != movie.genres!!.size - 1) {
+                        val dot = ImageView(context)
+                        dot.setImageResource(R.drawable.ic_dot)
+                        dot.setPadding(5, 0, 5, 0)
+                        linear_genre.addView(dot)
+                    }
                 }
                 txt_synopsis.text = movie.overview
+                if (movie.duration != null) {
+                    val h = (movie.duration!! / 60)
+                    val m = (movie.duration!! % 60)
+                    val text = "${h}h ${m}m"
+                    txt_duration.text = text
+                } else {
+                    txt_duration.gone()
+                }
             }
             else -> Unit
         }.safe

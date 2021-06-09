@@ -31,7 +31,9 @@ data class Movie(
     @ColumnInfo(name = "genres")
     val genres: List<String>?,
     @ColumnInfo(name = "is_model_complete")
-    val isModelComplete: Boolean
+    val isModelComplete: Boolean,
+    @ColumnInfo(name = "duration")
+    val duration: Int?
 )
 
 @Entity(

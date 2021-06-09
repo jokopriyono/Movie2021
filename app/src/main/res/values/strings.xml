@@ -10,4 +10,5 @@
     <string name="cast">Cast</string>
     <string name="watch_trailer">Watch Trailer</string>
     <string name="hd">HD</string>
+    <string name="add_to_favorite">Add to Favorite</string>
 </resources>

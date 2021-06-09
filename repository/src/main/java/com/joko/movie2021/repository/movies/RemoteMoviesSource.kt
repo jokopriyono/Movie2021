@@ -34,9 +34,7 @@ internal class RemoteMoviesSource(
                             Resource.Success(movieResponse.body.toMovie())
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<Movie>(
-                                movieResponse.body?.statusMessage ?: "Server Error"
-                            )
+                            Resource.Error(movieResponse.body?.statusMessage ?: "Server Error")
                         }
                         is NetworkResponse.NetworkError -> {
                             Resource.Error(movieResponse.error.localizedMessage ?: "Network Error")
@@ -57,7 +55,7 @@ internal class RemoteMoviesSource(
                             Resource.Success(accountStateResponse.body.toAccountState(movieId))
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<AccountState>(
+                            Resource.Error(
                                 accountStateResponse.body?.statusMessage ?: "Server Error"
                             )
                         }
@@ -90,7 +88,7 @@ internal class RemoteMoviesSource(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<Cast>(response.body?.statusMessage ?: "Server Error")
+                            Resource.Error(response.body?.statusMessage ?: "Server Error")
                         }
                         is NetworkResponse.NetworkError -> {
                             Resource.Error(response.error.localizedMessage ?: "Server Error")
@@ -172,7 +170,7 @@ internal class RemoteMoviesSource(
                             Resource.Success(searchResponse.body.results.map { it.toMovie() })
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<List<Movie>>(
+                            Resource.Error(
                                 searchResponse.body?.statusMessage ?: "Server Error"
                             )
                         }
@@ -197,7 +195,7 @@ internal class RemoteMoviesSource(
                             Resource.Success(similarMoviesResponse.body.results.map { it.toMovie() })
                         }
                         is NetworkResponse.ServerError -> {
-                            Resource.Error<List<Movie>>(
+                            Resource.Error(
                                 similarMoviesResponse.body?.statusMessage ?: "Server Error"
                             )
                         }
