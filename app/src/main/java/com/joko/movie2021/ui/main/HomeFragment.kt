@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
@@ -52,8 +51,12 @@ class HomeFragment :
         parametersOf(this)
     }
 
-    private val homeEpoxyController: HomeEpoxyController by inject {
-        parametersOf(callbacks, glideRequestManager)
+    private val popularEpoxyController: HomeEpoxyController by inject {
+        parametersOf(callbacks, glideRequestManager, CollectionType.Popular)
+    }
+
+    private val upcomingEpoxyController: HomeEpoxyController by inject {
+        parametersOf(callbacks, glideRequestManager, CollectionType.Upcoming)
     }
 
     private val onDestroyView: PublishRelay<Unit> = PublishRelay.create()
@@ -74,13 +77,11 @@ class HomeFragment :
         super.onActivityCreated(savedInstanceState)
         homeViewModel.apply {
 
-            message.observe(viewLifecycleOwner, Observer { message ->
+            message.observe(viewLifecycleOwner, { message ->
                 view?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }
             })
 
-            state.observe(viewLifecycleOwner, Observer { state ->
-                renderState(state)
-            })
+            state.observe(viewLifecycleOwner, { renderState(it) })
 
             forceRefreshCollection(CollectionType.Popular)
             forceRefreshCollection(CollectionType.Upcoming)
@@ -110,10 +111,10 @@ class HomeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_popular.apply {
-            setController(homeEpoxyController)
+            setController(popularEpoxyController)
         }
         recycler_coming.apply {
-            setController(homeEpoxyController)
+            setController(upcomingEpoxyController)
         }
         (view.parent as ViewGroup).doOnPreDraw {
             startPostponedEnterTransition()
@@ -130,7 +131,8 @@ class HomeFragment :
     }
 
     override fun renderState(state: UIState.HomeScreenState) {
-        homeEpoxyController.setData(state)
+        popularEpoxyController.setData(state)
+        upcomingEpoxyController.setData(state)
     }
 
     override fun onDestroyView() {

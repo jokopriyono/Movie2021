@@ -113,6 +113,7 @@ class MovieDetailFragment : BaseFragment(), MVRxLiteView<UIState.DetailsScreenSt
         (view.parent as ViewGroup).doOnPreDraw {
             startPostponedEnterTransition()
         }
+        img_back.setOnClickListener { activity?.onBackPressed() }
     }
 
     override fun renderState(state: UIState.DetailsScreenState) {

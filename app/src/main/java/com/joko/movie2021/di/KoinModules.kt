@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.joko.movie2021.R
+import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.ui.UIState
 import com.joko.movie2021.ui.common.EpoxyCallbacks
 import com.joko.movie2021.ui.main.HomeEpoxyController
@@ -49,8 +50,8 @@ val uiModule = module {
         Glide.with(view)
     }
 
-    factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
-        HomeEpoxyController(callbacks, glide, get(named("epoxy-handler")))
+    factory { (callbacks: EpoxyCallbacks, glide: RequestManager, type: CollectionType) ->
+        HomeEpoxyController(callbacks, glide, type, get(named("epoxy-handler")))
     }
 
     factory { (callbacks: MovieDetailEpoxyController.MovieDetailsCallbacks, glide: RequestManager) ->

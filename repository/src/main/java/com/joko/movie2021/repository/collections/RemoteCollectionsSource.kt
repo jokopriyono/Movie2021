@@ -104,7 +104,7 @@ internal class RemoteCollectionsSource(
     }
 
     private fun getUpcomingCollection(): Single<Resource<Collection>> {
-        return discoveryService.getPopularMovies().asSingle(Dispatchers.Default)
+        return discoveryService.getUpcomingMovies().asSingle(Dispatchers.Default)
             .flatMap { response ->
                 Single.just(when (response) {
                     is NetworkResponse.Success -> {
