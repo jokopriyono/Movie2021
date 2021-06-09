@@ -27,7 +27,7 @@
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:id="@+id/txt_genre"
+                android:id="@+id/txt_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -62,7 +62,7 @@
         tools:text="Lorem Ipsum - Title on here" />
 
     <TextView
-        android:id="@+id/txt_desc"
+        android:id="@+id/txt_overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

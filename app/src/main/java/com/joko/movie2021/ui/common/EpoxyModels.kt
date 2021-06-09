@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.joko.movie2021.R
+import com.joko.movie2021.core.extensions.gone
 import org.koin.core.KoinComponent
 
 @EpoxyModelClass(layout = R.layout.item_movie_grid)
@@ -57,7 +58,16 @@ abstract class MovieModel : EpoxyModelWithHolder<MovieModel.MovieViewHolder>() {
 abstract class MovieGridModel : EpoxyModelWithHolder<MovieGridModel.MovieViewHolder>() {
 
     @EpoxyAttribute
+    lateinit var title: String
+
+    @EpoxyAttribute
+    lateinit var overview: String
+
+    @EpoxyAttribute
     lateinit var posterUrl: String
+
+    @EpoxyAttribute
+    lateinit var genres: List<String>
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var clickListener: View.OnClickListener
@@ -73,6 +83,17 @@ abstract class MovieGridModel : EpoxyModelWithHolder<MovieGridModel.MovieViewHol
 
     override fun bind(holder: MovieViewHolder) {
         super.bind(holder)
+        holder.txtTitle.text = title
+        holder.txtOverview.text = overview
+        if (genres.isNotEmpty()) {
+            var text = ""
+            genres.mapIndexed { idx, t ->
+                text += if (idx != genres.size - 1) "$t, " else t
+            }
+            holder.txtGenres.text = text
+        } else {
+            holder.txtGenres.gone()
+        }
         glide.load(posterUrl)
             .transition(DrawableTransitionOptions.withCrossFade())
             .apply {
@@ -89,6 +110,9 @@ abstract class MovieGridModel : EpoxyModelWithHolder<MovieGridModel.MovieViewHol
 
     inner class MovieViewHolder : KotlinEpoxyHolder(), KoinComponent {
         val imgMovie by bind<ImageView>(R.id.img_movie)
+        val txtTitle by bind<TextView>(R.id.txt_title)
+        val txtOverview by bind<TextView>(R.id.txt_overview)
+        val txtGenres by bind<TextView>(R.id.txt_genres)
     }
 }
 

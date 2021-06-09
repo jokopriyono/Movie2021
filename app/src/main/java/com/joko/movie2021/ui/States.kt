@@ -24,4 +24,8 @@ sealed class UIState : MVRxLiteState {
         val castResource: List<Resource<Actor>>,
         val similarMoviesResource: Resource<List<Movie>>
     ) : UIState()
+
+    data class PopularScreenState(
+        val popularMoviesResource: Resource<List<Movie>>
+    ) : UIState()
 }

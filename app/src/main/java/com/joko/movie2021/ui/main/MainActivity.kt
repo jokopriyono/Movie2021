@@ -2,10 +2,8 @@ package com.joko.movie2021.ui.main
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -21,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var backPressListener: BackPressListener? = null
     private lateinit var navController: NavController
 
-    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             (supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment).navController
 
         with(mainViewModel) {
-            backPressListener.observe(this@MainActivity, Observer { listener ->
+            backPressListener.observe(this@MainActivity, { listener ->
                 this@MainActivity.backPressListener = listener
             })
         }
@@ -43,16 +41,17 @@ class MainActivity : AppCompatActivity() {
         bottom_nav.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { controller, destination, _ ->
-//            when (destination.id) {
-//                R.id.movieDetailsFragment, R.id.actorDetailsFragment -> {
+            when (destination.id) {
+                R.id.movieDetailsFragment -> {
 //                    fragment.animateHideDown()
-//                    window.navigationBarColor = ContextCompat.getColor(this, R.color.colorSurfaceDark)
-//                }
-//                else -> {
+                    window.navigationBarColor =
+                        ContextCompat.getColor(this, R.color.colorSurfaceDark)
+                }
+                else -> {
 //                    fragment.animateShowUp()
-//                    window.navigationBarColor = ContextCompat.getColor(this, R.color.colorSurface)
-//                }
-//            }
+                    window.navigationBarColor = ContextCompat.getColor(this, R.color.colorSurface)
+                }
+            }
         }
     }
 
@@ -66,49 +65,5 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         PreferenceManager.getDefaultSharedPreferences(this)
             .unregisterOnSharedPreferenceChangeListener(prefsListener)
-    }
-
-    private fun View.animateHideDown() {
-        if (this.visibility == View.VISIBLE) {
-            this.animate()
-                .translationY(-1f)
-                .alpha(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(500)
-                .withEndAction { this.visibility = View.GONE }
-        }
-    }
-
-    private fun View.animatedHideUp() {
-        if (this.visibility == View.VISIBLE) {
-            this.animate()
-                .translationY(2f)
-                .alpha(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(500)
-                .withEndAction { this.visibility = View.GONE }
-        }
-    }
-
-    private fun View.animateShowUp() {
-        if (this.visibility != View.VISIBLE) {
-            this.animate()
-                .translationY(1f)
-                .alpha(1f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(500)
-                .withStartAction { this.visibility = View.VISIBLE }
-        }
-    }
-
-    private fun View.animateShowDown() {
-        if (this.visibility != View.VISIBLE) {
-            this.animate()
-                .translationY(0f)
-                .alpha(1f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(500)
-                .withStartAction { this.visibility = View.VISIBLE }
-        }
     }
 }

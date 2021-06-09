@@ -17,6 +17,8 @@ import com.joko.movie2021.ui.main.HomeViewModel
 import com.joko.movie2021.ui.main.MainViewModel
 import com.joko.movie2021.ui.moviedetail.MovieDetailEpoxyController
 import com.joko.movie2021.ui.moviedetail.MovieDetailViewModel
+import com.joko.movie2021.ui.popular.PopularEpoxyController
+import com.joko.movie2021.ui.popular.PopularViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -39,7 +41,9 @@ val uiModule = module {
     viewModel { (movieId: Int, initialState: UIState.DetailsScreenState) ->
         MovieDetailViewModel(movieId, get(), initialState)
     }
-
+    viewModel { (initialState: UIState.PopularScreenState) ->
+        PopularViewModel(get(), initialState)
+    }
     viewModel { MainViewModel(get()) }
 
     factory(named("fragment-glide-request-manager")) { (fragment: Fragment) ->
@@ -56,6 +60,10 @@ val uiModule = module {
 
     factory { (callbacks: MovieDetailEpoxyController.MovieDetailsCallbacks, glide: RequestManager) ->
         MovieDetailEpoxyController(callbacks, glide, get(named("epoxy-handler")))
+    }
+
+    factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
+        PopularEpoxyController(callbacks, glide, get(named("epoxy-handler")))
     }
 
     single(named("epoxy-handler-thread")) {
