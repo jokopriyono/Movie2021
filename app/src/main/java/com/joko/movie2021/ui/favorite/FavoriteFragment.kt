@@ -14,7 +14,6 @@ import com.joko.movie2021.core.Resource
 import com.joko.movie2021.mvrxlite.MVRxLiteView
 import com.joko.movie2021.ui.BaseFragment
 import com.joko.movie2021.ui.UIState
-import com.joko.movie2021.ui.common.EpoxyCallbacks
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -23,7 +22,11 @@ import org.koin.core.qualifier.named
 
 class FavoriteFragment : BaseFragment(), MVRxLiteView<UIState.FavoriteScreenState> {
 
-    private val callbacks = object : EpoxyCallbacks {
+    private val callbacks = object : FavoriteEpoxyController.MovieDetailsCallbacks {
+        override fun onDeleteItemClicked(id: Int, transitionName: String, sharedView: View?) {
+            favoriteViewModel.deleteFavoriteMovie(id)
+        }
+
         override fun onMovieItemClicked(id: Int, transitionName: String, sharedView: View?) {
             val action = FavoriteFragmentDirections.viewMovieDetails(
                 movieIdArg = id,

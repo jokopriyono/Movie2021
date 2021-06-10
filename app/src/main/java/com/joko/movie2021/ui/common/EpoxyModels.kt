@@ -132,7 +132,10 @@ abstract class FavoriteModel : EpoxyModelWithHolder<FavoriteModel.MovieViewHolde
     lateinit var year: String
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    lateinit var clickListener: View.OnClickListener
+    lateinit var imageClickListener: View.OnClickListener
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var deleteClickListener: View.OnClickListener
 
     @EpoxyAttribute
     lateinit var transitionName: String
@@ -167,11 +170,13 @@ abstract class FavoriteModel : EpoxyModelWithHolder<FavoriteModel.MovieViewHolde
             }
             .into(holder.imgMovie)
         ViewCompat.setTransitionName(holder.imgMovie, transitionName)
-        holder.imgMovie.setOnClickListener(clickListener)
+        holder.imgMovie.setOnClickListener(imageClickListener)
+        holder.imgDelete.setOnClickListener(deleteClickListener)
     }
 
     inner class MovieViewHolder : KotlinEpoxyHolder(), KoinComponent {
         val imgMovie by bind<ImageView>(R.id.img_movie)
+        val imgDelete by bind<ImageView>(R.id.img_delete)
         val txtTitle by bind<TextView>(R.id.txt_title)
         val txtGenres by bind<TextView>(R.id.txt_genres)
         val txtYear by bind<TextView>(R.id.txt_year)

@@ -71,7 +71,7 @@ val uiModule = module {
         PopularEpoxyController(callbacks, glide, get(named("epoxy-handler")))
     }
 
-    factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
+    factory { (callbacks: FavoriteEpoxyController.MovieDetailsCallbacks, glide: RequestManager) ->
         FavoriteEpoxyController(callbacks, glide, get(named("epoxy-handler")))
     }
 

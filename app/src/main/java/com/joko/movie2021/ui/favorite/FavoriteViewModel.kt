@@ -2,11 +2,15 @@ package com.joko.movie2021.ui.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.joko.movie2021.core.Resource
 import com.joko.movie2021.core.extensions.disposeWith
 import com.joko.movie2021.core.extensions.log
 import com.joko.movie2021.mvrxlite.MVRxLiteViewModel
+import com.joko.movie2021.repository.collections.Collection
+import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.repository.collections.CollectionsRepository
 import com.joko.movie2021.ui.UIState
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -49,5 +53,31 @@ class FavoriteViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    fun deleteFavoriteMovie(movieId: Int) {
+        withState { state ->
+            if (state.favoriteMoviesResource is Resource.Success) {
+                Observable.just(collectionsRepository.getFavoriteCollection())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.computation())
+                    .subscribe({ coll ->
+                        val movies = coll.blockingGet()
+                        val contents = mutableListOf<Int>()
+                        val movieRemoved = movies.contents.filter { it != movieId }
+                        contents.addAll(movieRemoved)
+                        val newCollection = Collection(CollectionType.Favourite.name, contents)
+                        Observable
+                            .just(collectionsRepository.updateFavoritesCollection(newCollection))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.computation())
+                            .subscribe({
+                                getFavoriteMovies()
+                            }, {})
+                            .disposeWith(compositeDisposable)
+                    }, {})
+                    .disposeWith(compositeDisposable)
+            }
+        }
     }
 }
