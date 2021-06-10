@@ -26,6 +26,7 @@ sealed class UIState : MVRxLiteState {
     ) : UIState()
 
     data class PopularScreenState(
-        val popularMoviesResource: Resource<List<Movie>>
+        val popularMoviesResource: Resource<List<Movie>>,
+        var lastQuery: String?
     ) : UIState()
 }

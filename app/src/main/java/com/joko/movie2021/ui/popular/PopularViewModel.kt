@@ -9,6 +9,7 @@ import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.repository.collections.CollectionsRepository
 import com.joko.movie2021.ui.UIState
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
@@ -19,6 +20,7 @@ class PopularViewModel(
     initialState: UIState.PopularScreenState
 ) : MVRxLiteViewModel<UIState.PopularScreenState>(initialState) {
     private val compositeDisposable = CompositeDisposable()
+    private var currentQuery: Disposable? = null
     private val _message = MutableLiveData<String>()
 
     val message: LiveData<String>
@@ -60,5 +62,27 @@ class PopularViewModel(
             is TimeoutException -> _message.postValue("Request timed out")
             else -> _message.postValue("An error occurred")
         }
+    }
+
+    fun getSearchResultsForQuery(query: String) {
+        if (query.length > 2) {
+            currentQuery?.dispose()
+            currentQuery = collectionsRepository.searchPopularCollectionFlowable(query)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    { searchResults ->
+                        setState {
+                            copy(popularMoviesResource = searchResults, lastQuery = query)
+                        }
+                    },
+                    { error ->
+                        handleError(error, "get-search-results")
+                    }
+                )
+        } else if (query.isEmpty()) {
+            getPopularMovies()
+            withState { state -> state.lastQuery = null }
+        }
+        currentQuery?.disposeWith(compositeDisposable)
     }
 }

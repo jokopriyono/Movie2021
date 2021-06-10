@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:drawableEnd="@drawable/ic_search"
-                    android:hint="@string/search"
+                    android:hint="@string/search_hint"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textSize="18sp" />

@@ -8,8 +8,12 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.RequestManager
+import com.jakewharton.rxbinding3.widget.textChanges
+import com.jakewharton.rxrelay2.PublishRelay
 import com.joko.movie2021.R
 import com.joko.movie2021.core.Resource
+import com.joko.movie2021.core.extensions.gone
+import com.joko.movie2021.core.extensions.visible
 import com.joko.movie2021.mvrxlite.MVRxLiteView
 import com.joko.movie2021.ui.BaseFragment
 import com.joko.movie2021.ui.UIState
@@ -20,6 +24,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 class PopularFragment : BaseFragment(), MVRxLiteView<UIState.PopularScreenState> {
@@ -45,8 +50,10 @@ class PopularFragment : BaseFragment(), MVRxLiteView<UIState.PopularScreenState>
         parametersOf(callbacks, glideRequestManager)
     }
 
+    private val onDestroyView: PublishRelay<Unit> = PublishRelay.create()
+
     override val initialState: UIState by lazy {
-        UIState.PopularScreenState(popularMoviesResource = Resource.Loading())
+        UIState.PopularScreenState(popularMoviesResource = Resource.Loading(), null)
     }
 
     private val popularViewModel: PopularViewModel by viewModel {
@@ -81,9 +88,30 @@ class PopularFragment : BaseFragment(), MVRxLiteView<UIState.PopularScreenState>
             addItemDecoration(EqualSpaceGridItemDecoration(space.roundToInt()))
             setController(popularEpoxyController)
         }
+        setupSearchBox()
+        // To make sure the search box does not have focus
+        getView()?.requestFocus()
+    }
+
+    private fun setupSearchBox() {
+        edt_search.textChanges()
+            .debounce(300, TimeUnit.MILLISECONDS)
+            .map { text -> text.toString() }
+            .takeUntil(onDestroyView)
+            .doOnNext { query ->
+                popularViewModel.getSearchResultsForQuery(query)
+            }
+            .subscribe()
     }
 
     override fun renderState(state: UIState.PopularScreenState) {
+        if (state.lastQuery != null) {
+            txt_result.visible()
+            val txt = "Showing result of ‘${state.lastQuery}’"
+            txt_result.text = txt
+        } else {
+            txt_result.gone()
+        }
         popularEpoxyController.setData(state)
     }
 }
