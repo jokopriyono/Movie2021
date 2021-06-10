@@ -1,7 +1,6 @@
 package com.joko.movie2021.repository.movies
 
 import com.joko.movie2021.core.extensions.log
-import com.joko.movie2021.repository.actors.Actor
 import com.joko.movie2021.repository.actors.ActorsDao
 
 internal class LocalMoviesSource(
@@ -21,10 +20,6 @@ internal class LocalMoviesSource(
     fun getMovie(id: Int) = moviesDao.getMovie(id)
 
     fun getAccountStatesForMovie(movieId: Int) = moviesDao.getAccountStatesForMovie(movieId)
-
-    fun getCastForMovie(movieId: Int) = moviesDao.getCastForMovie(movieId)
-
-    fun getMovieTrailer(movieId: Int) = moviesDao.getTrailerForMovie(movieId)
 
     fun isMovieInDatabase(id: Int) = moviesDao.isMovieInDatabase(id)
 
@@ -53,32 +48,8 @@ internal class LocalMoviesSource(
 
     fun saveMoviesToDatabase(movies: List<Movie>) = moviesDao.saveAllMovies(movies)
 
-    fun saveAccountStatesToDatabase(accountStates: List<AccountState>) =
-        moviesDao.saveAllAccountStates(accountStates)
-
-    fun saveCastsToDatabase(casts: List<Cast>) {
-        moviesDao.saveAllCasts(casts)
-        casts.forEach { cast ->
-            cast.castMembers?.let {
-                actorsDao.saveAllActorsFromCast(it)
-            }
-        }
-    }
-
-    fun saveActorsToDatabase(actors: List<Actor>) = actorsDao.saveAllActors(actors)
-
-    fun saveMovieTrailersInDatabase(movieTrailers: List<MovieTrailer>) =
-        moviesDao.saveAllMovieTrailers(movieTrailers)
-
-    fun updateMovieInDatabase(movie: Movie) = moviesDao.updateMovie(movie)
-
     fun updateAccountStatesInDatabase(accountState: AccountState) =
         moviesDao.updateAccountState(accountState)
-
-    fun updateCastInDatabase(cast: Cast) = moviesDao.updateCast(cast)
-
-    fun updateMovieTrailerInDatabase(movieTrailer: MovieTrailer) =
-        moviesDao.updateMovieTrailer(movieTrailer)
 
     fun getActorsForMovie(actorIds: List<Int>) = moviesDao.getActorsForMovie(actorIds)
 

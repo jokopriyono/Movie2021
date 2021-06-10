@@ -14,6 +14,19 @@ class CollectionsRepository internal constructor(
     private val localMoviesResource: LocalMoviesSource
 ) {
 
+    fun getFavoriteCollection(): Single<Collection> {
+        return localCollectionsSource.getCollection(CollectionType.Favourite)
+    }
+
+    fun insertEmptyFavoriteCollection() {
+        val collection = Collection(CollectionType.Favourite.name, listOf())
+        return localCollectionsSource.saveCollection(collection)
+    }
+
+    fun updateFavoritesCollection(collection: Collection) {
+        return localCollectionsSource.saveCollection(collection)
+    }
+
     fun searchPopularCollectionFlowable(query: String): Flowable<Resource.Success<List<Movie>>> {
         return localCollectionsSource.getCollectionFlowable(CollectionType.Popular)
             .switchMap {

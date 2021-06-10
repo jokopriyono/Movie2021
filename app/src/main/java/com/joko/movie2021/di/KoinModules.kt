@@ -39,7 +39,7 @@ val uiModule = module {
         HomeViewModel(get(), get(), initialState)
     }
     viewModel { (movieId: Int, initialState: UIState.DetailsScreenState) ->
-        MovieDetailViewModel(movieId, get(), initialState)
+        MovieDetailViewModel(movieId, get(), get(), initialState)
     }
     viewModel { (initialState: UIState.PopularScreenState) ->
         PopularViewModel(get(), initialState)

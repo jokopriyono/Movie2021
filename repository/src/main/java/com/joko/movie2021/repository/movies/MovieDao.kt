@@ -74,18 +74,6 @@ internal interface MovieDao {
     fun saveMovieTrailer(movieTrailer: MovieTrailer)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveMovies(vararg movie: Movie)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAccountStates(vararg accountState: AccountState)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveCasts(vararg cast: Cast)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveMovieTrailers(vararg movieTrailer: MovieTrailer)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllMovies(movies: List<Movie>)
 
     /**
@@ -95,86 +83,11 @@ internal interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveAllMoviesFromCollection(movies: List<Movie>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAllAccountStates(accountStates: List<AccountState>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAllCasts(casts: List<Cast>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAllMovieTrailers(trailers: List<MovieTrailer>)
-
     @Update
     fun updateMovie(movie: Movie)
 
     @Update
     fun updateAccountState(accountState: AccountState)
-
-    @Update
-    fun updateCast(cast: Cast)
-
-    @Update
-    fun updateMovieTrailer(movieTrailer: MovieTrailer)
-
-    @Update
-    fun updateMovies(vararg movie: Movie)
-
-    @Update
-    fun updateAccountStates(vararg accountState: AccountState)
-
-    @Update
-    fun updateCasts(vararg cast: Cast)
-
-    @Update
-    fun updateTrailers(vararg trailer: MovieTrailer)
-
-    @Update
-    fun updateAllMovies(movies: List<Movie>)
-
-    @Update
-    fun updateAllAccountStates(accountStates: List<AccountState>)
-
-    @Update
-    fun updateAllCasts(casts: List<Cast>)
-
-    @Update
-    fun updateAllTrailers(trailers: List<MovieTrailer>)
-
-    @Delete
-    fun deleteMovie(movie: Movie)
-
-    @Delete
-    fun deleteAccountState(accountState: AccountState)
-
-    @Delete
-    fun deleteCast(cast: Cast)
-
-    @Delete
-    fun deleteMovieTrailer(movieTrailer: MovieTrailer)
-
-    @Delete
-    fun deleteMovies(vararg movie: Movie)
-
-    @Delete
-    fun deleteAccountStates(vararg accountState: AccountState)
-
-    @Delete
-    fun deleteCasts(vararg cast: Cast)
-
-    @Delete
-    fun deleteMovieTrailers(vararg movieTrailer: MovieTrailer)
-
-    @Delete
-    fun deleteAllMovies(movies: List<Movie>)
-
-    @Delete
-    fun deleteAllAccountStates(accountStates: List<AccountState>)
-
-    @Delete
-    fun deleteAllCasts(casts: List<Cast>)
-
-    @Delete
-    fun deleteAllMovieTrailers(movieTrailers: List<MovieTrailer>)
 
     @Query("SELECT * from actors WHERE id IN (:ids)")
     fun getActorsForMovie(ids: List<Int>): Single<List<Actor>>

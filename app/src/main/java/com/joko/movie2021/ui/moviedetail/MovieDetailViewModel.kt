@@ -6,6 +6,9 @@ import com.joko.movie2021.core.extensions.disposeWith
 import com.joko.movie2021.core.extensions.log
 import com.joko.movie2021.mvrxlite.MVRxLiteViewModel
 import com.joko.movie2021.repository.actors.Actor
+import com.joko.movie2021.repository.collections.Collection
+import com.joko.movie2021.repository.collections.CollectionType
+import com.joko.movie2021.repository.collections.CollectionsRepository
 import com.joko.movie2021.repository.movies.Cast
 import com.joko.movie2021.repository.movies.Movie
 import com.joko.movie2021.repository.movies.MoviesRepository
@@ -21,14 +24,14 @@ import java.util.concurrent.TimeoutException
 class MovieDetailViewModel(
     private val movieId: Int,
     private val moviesRepository: MoviesRepository,
+    private val collectionsRepository: CollectionsRepository,
     initialState: UIState.DetailsScreenState
 ) : MVRxLiteViewModel<UIState.DetailsScreenState>(initialState) {
 
     private val compositeDisposable = CompositeDisposable()
     private val _message = SingleLiveEvent<String>()
 
-    val message: LiveData<String>
-        get() = _message
+    val message: LiveData<String> get() = _message
 
     fun getAllMovieInfo() {
         this.getMovieDetails()
@@ -57,6 +60,50 @@ class MovieDetailViewModel(
             }
             .connect()
             .disposeWith(compositeDisposable)
+    }
+
+    fun isMovieFavorite() {
+        withState { state ->
+            Observable.just(collectionsRepository.getFavoriteCollection())
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .subscribe { result ->
+                    val coll = result.blockingGet()
+                    val find = coll.contents.filter { it == state.movieId }
+                    setState {
+                        copy(
+                            favoriteMoviesResource = Resource.Success(coll),
+                            isFavorite = find.isNotEmpty()
+                        )
+                    }
+                }
+                .disposeWith(compositeDisposable)
+        }
+    }
+
+    fun toggleFavorite() {
+        withState { state ->
+            if (state.favoriteMoviesResource is Resource.Success) {
+                val contents = mutableListOf<Int>()
+                if (state.isFavorite) {
+                    val movieRemoved = state.favoriteMoviesResource.data.contents
+                        .filter { it != state.movieId }
+                    contents.addAll(movieRemoved)
+                } else {
+                    contents.addAll(state.favoriteMoviesResource.data.contents)
+                    contents.add(state.movieId)
+                }
+                val newCollection = Collection(CollectionType.Favourite.name, contents)
+                Observable
+                    .just(collectionsRepository.updateFavoritesCollection(newCollection))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.computation())
+                    .subscribe({
+                        isMovieFavorite()
+                    }, {})
+                    .disposeWith(compositeDisposable)
+            }
+        }
     }
 
     private fun getMovieDetails(): Observable<Resource<Movie>> {

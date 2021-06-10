@@ -57,7 +57,7 @@ class MovieDetailFragment : BaseFragment(), MVRxLiteView<UIState.DetailsScreenSt
             movieResource = Resource.Loading(),
             trailerResource = Resource.Loading(),
             castResource = listOf(Resource.Loading()),
-            similarMoviesResource = Resource.Loading()
+            favoriteMoviesResource = Resource.Loading()
         )
     }
 
@@ -97,6 +97,7 @@ class MovieDetailFragment : BaseFragment(), MVRxLiteView<UIState.DetailsScreenSt
         super.onActivityCreated(savedInstanceState)
 
         with(movieDetailsViewModel) {
+            isMovieFavorite()
             getAllMovieInfo()
             message.observe(viewLifecycleOwner, { message ->
                 view?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }
@@ -116,11 +117,21 @@ class MovieDetailFragment : BaseFragment(), MVRxLiteView<UIState.DetailsScreenSt
             startPostponedEnterTransition()
         }
         img_back.setOnClickListener { activity?.onBackPressed() }
+        btn_add_remove_favorite.setOnClickListener {
+            movieDetailsViewModel.toggleFavorite()
+        }
     }
 
     override fun renderState(state: UIState.DetailsScreenState) {
-
         detailsEpoxyController.setData(state)
+
+        if (state.isFavorite) {
+            btn_add_remove_favorite.setText(R.string.favorite_movie)
+            btn_add_remove_favorite.setIconResource(R.drawable.ic_love)
+        } else {
+            btn_add_remove_favorite.setText(R.string.add_to_favorite)
+            btn_add_remove_favorite.setIconResource(R.drawable.ic_add)
+        }
 
         when (val movieResource = state.movieResource) {
             is Resource.Success -> {

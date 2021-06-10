@@ -76,6 +76,7 @@ class HomeFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         homeViewModel.apply {
+            checkFavoriteMovies()
 
             message.observe(viewLifecycleOwner, { message ->
                 view?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }

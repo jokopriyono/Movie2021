@@ -31,11 +31,6 @@ internal class LocalCollectionsSource(
         }
     }
 
-    fun getMoviesForCollection(ids: List<Int>): Single<List<Movie>> {
-        log("Querying DB for collection movies: $ids")
-        return collectionsDao.getMoviesForCollection(ids)
-    }
-
     fun getMoviesForCollectionFlowable(ids: List<Int>): Flowable<List<Movie>> {
         log("Querying DB for collection movies: $ids")
         return collectionsDao.getMoviesForCollectionFlowable(ids)

@@ -9,6 +9,7 @@ import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.repository.collections.CollectionsRepository
 import com.joko.movie2021.repository.movies.MoviesRepository
 import com.joko.movie2021.ui.UIState
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -32,6 +33,20 @@ class HomeViewModel(
         getUpcomingMovies()
     }
 
+    fun checkFavoriteMovies() {
+        Observable.just(collectionsRepository.getFavoriteCollection())
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .subscribe({}, {
+                Observable.just(collectionsRepository.insertEmptyFavoriteCollection())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.computation())
+                    .subscribe()
+                    .disposeWith(compositeDisposable)
+            })
+            .disposeWith(compositeDisposable)
+    }
+
     private fun getPopularMovies() {
         collectionsRepository.getCollectionFlowable(type = CollectionType.Popular)
             .init(compositeDisposable)
@@ -51,6 +66,7 @@ class HomeViewModel(
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onNext = { upcomingMovies ->
+                    checkFavoriteMovies()
                     setState { copy(upcomingMoviesResource = upcomingMovies) }
                 },
                 onError = { error -> handleError(error, "get-upcoming-movies") }

@@ -27,7 +27,7 @@ internal fun GeneralMovieResponse.toMovie(): Movie {
         null,
         null,
         null,
-        isModelComplete = false,
+        false,
         null
     )
 }

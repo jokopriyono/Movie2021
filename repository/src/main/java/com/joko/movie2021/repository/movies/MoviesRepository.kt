@@ -6,7 +6,6 @@ import com.joko.movie2021.repository.actors.Actor
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
-import io.reactivex.schedulers.Schedulers
 
 class MoviesRepository internal constructor(
     private val localMoviesSource: LocalMoviesSource,
@@ -44,29 +43,6 @@ class MoviesRepository internal constructor(
         }
     }
 
-    fun getAccountStatesForMovieResource(movieId: Int): NetworkBoundResource<AccountState> {
-
-        return object : NetworkBoundResource<AccountState>() {
-            override fun fetchFromNetwork(): Flowable<Resource<AccountState>> {
-                return remoteMoviesSource.getMovieAccountStates(movieId).toFlowable()
-            }
-
-            override fun fetchFromDatabase(): Flowable<Resource<AccountState>> {
-                return localMoviesSource.getAccountStateForMovieFlowable(movieId)
-                    .map { accountState -> Resource.Success(accountState) }
-            }
-
-            override fun shouldRefresh(): Single<Boolean> {
-                return localMoviesSource.isAccountStateInDatabase(movieId)
-                    .map { count -> count == 0 }
-            }
-
-            override fun saveToDatabase(accountState: AccountState) {
-                localMoviesSource.saveAccountStateToDatabase(accountState)
-            }
-        }
-    }
-
     fun getMovieCast(movieId: Int): NetworkBoundResource<Cast> {
 
         return object : NetworkBoundResource<Cast>() {
@@ -94,63 +70,6 @@ class MoviesRepository internal constructor(
         }
     }
 
-    fun getMovieTrailer(movieId: Int): NetworkBoundResource<MovieTrailer> {
-
-        return object : NetworkBoundResource<MovieTrailer>() {
-            override fun fetchFromNetwork(): Flowable<Resource<MovieTrailer>> {
-                return remoteMoviesSource.getMovieTrailer(movieId)
-            }
-
-            override fun fetchFromDatabase(): Flowable<Resource<MovieTrailer>> {
-                return localMoviesSource.getMovieTrailerFlowable(movieId)
-                    .map { trailer -> Resource.Success(trailer) }
-            }
-
-            override fun shouldRefresh(): Single<Boolean> {
-                return localMoviesSource.isMovieTrailerInDatabase(movieId)
-                    .map { count -> count == 0 }
-            }
-
-            override fun saveToDatabase(movieTrailer: MovieTrailer) {
-                localMoviesSource.saveMovieTrailerToDatabase(movieTrailer)
-            }
-        }
-    }
-
-    fun toggleMovieFavouriteStatus(movieId: Int, accountId: Int): Single<AccountState> {
-
-        return localMoviesSource.getAccountStatesForMovie(movieId)
-            .flatMap { accountState ->
-                val newStatus = !accountState.isFavourited!!
-                remoteMoviesSource.toggleMovieFavouriteStatus(newStatus, movieId, accountId)
-            }
-            .flatMap {
-                localMoviesSource.getAccountStatesForMovie(movieId)
-            }
-            .observeOn(Schedulers.single())
-            .doOnSuccess { accountStates ->
-                val newStatus = !accountStates.isFavourited!!
-                localMoviesSource.updateAccountStatesInDatabase(accountStates.copy(isFavourited = newStatus))
-            }
-    }
-
-    fun toggleMovieWatchlistStatus(movieId: Int, accountId: Int): Single<AccountState> {
-
-        return localMoviesSource.getAccountStatesForMovie(movieId)
-            .flatMap { accountState ->
-                val newStatus = !accountState.isWatchlisted!!
-                remoteMoviesSource.toggleMovieWatchlistStatus(newStatus, movieId, accountId)
-            }
-            .flatMap {
-                localMoviesSource.getAccountStatesForMovie(movieId)
-            }
-            .observeOn(Schedulers.single())
-            .doOnSuccess { accountStates ->
-                val newStatus = !accountStates.isWatchlisted!!
-                localMoviesSource.updateAccountStatesInDatabase(accountStates.copy(isWatchlisted = newStatus))
-            }
-    }
-
     fun forceRefreshMovieDetails(id: Int): NetworkBoundResource<Movie> {
         return object : NetworkBoundResource<Movie>() {
             override fun fetchFromNetwork(): Flowable<Resource<Movie>> {
@@ -172,16 +91,8 @@ class MoviesRepository internal constructor(
         }
     }
 
-    fun getSearchResultsForQuery(query: String): Single<Resource<List<Movie>>> {
-        return remoteMoviesSource.getSearchResultsForQuery(query)
-    }
-
     fun getActorsInMovie(ids: List<Int>): Single<List<Resource<Actor>>> {
         return localMoviesSource.getActorsForMovie(ids)
             .map { actors -> actors.map { Resource.Success(it) } }
-    }
-
-    fun getSimilarMoviesForMovie(movieId: Int): Single<Resource<List<Movie>>> {
-        return remoteMoviesSource.getSimilarMoviesForMovie(movieId)
     }
 }

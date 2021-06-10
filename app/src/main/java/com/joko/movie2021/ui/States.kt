@@ -4,6 +4,7 @@ import android.view.View
 import com.joko.movie2021.core.Resource
 import com.joko.movie2021.mvrxlite.MVRxLiteState
 import com.joko.movie2021.repository.actors.Actor
+import com.joko.movie2021.repository.collections.Collection
 import com.joko.movie2021.repository.movies.Movie
 import com.joko.movie2021.repository.movies.MovieTrailer
 
@@ -22,7 +23,8 @@ sealed class UIState : MVRxLiteState {
         val movieResource: Resource<Movie>,
         val trailerResource: Resource<MovieTrailer>,
         val castResource: List<Resource<Actor>>,
-        val similarMoviesResource: Resource<List<Movie>>
+        val favoriteMoviesResource: Resource<Collection>,
+        val isFavorite: Boolean = false
     ) : UIState()
 
     data class PopularScreenState(
