@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.RequestManager
 import com.joko.movie2021.R
 import com.joko.movie2021.core.Resource
@@ -13,11 +14,13 @@ import com.joko.movie2021.mvrxlite.MVRxLiteView
 import com.joko.movie2021.ui.BaseFragment
 import com.joko.movie2021.ui.UIState
 import com.joko.movie2021.ui.common.EpoxyCallbacks
+import com.joko.movie2021.utils.EqualSpaceGridItemDecoration
 import kotlinx.android.synthetic.main.fragment_popular.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
+import kotlin.math.roundToInt
 
 class PopularFragment : BaseFragment(), MVRxLiteView<UIState.PopularScreenState> {
 
@@ -73,10 +76,9 @@ class PopularFragment : BaseFragment(), MVRxLiteView<UIState.PopularScreenState>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_popular.apply {
-//            val columns = resources.getDimension(R.dimen.movie_grid_poster_width).getNumberOfColumns(context!!)
-//            val space = resources.getDimension(R.dimen.movie_grid_item_space)
-//            layoutManager = GridLayoutManager(context, columns)
-//            addItemDecoration(EqualSpaceGridItemDecoration(space.roundToInt()))
+            val space = resources.getDimension(R.dimen.movie_grid_item_space)
+            layoutManager = GridLayoutManager(context, 2)
+            addItemDecoration(EqualSpaceGridItemDecoration(space.roundToInt()))
             setController(popularEpoxyController)
         }
     }

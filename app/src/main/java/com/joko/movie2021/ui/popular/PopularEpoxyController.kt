@@ -26,6 +26,15 @@ class PopularEpoxyController(
                             title(movie.title)
                             overview(movie.overview)
                             posterUrl(movie.posterPath)
+                            glide(glide)
+                            transitionName("poster-${movie.id}")
+                            clickListener { _, _, clickedView, _ ->
+                                callbacks.onMovieItemClicked(
+                                    movie.id,
+                                    "poster-${movie.id}",
+                                    clickedView
+                                )
+                            }
                         }
                     }
                 }
