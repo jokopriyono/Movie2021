@@ -116,6 +116,68 @@ abstract class MovieGridModel : EpoxyModelWithHolder<MovieGridModel.MovieViewHol
     }
 }
 
+@EpoxyModelClass(layout = R.layout.item_favorite)
+abstract class FavoriteModel : EpoxyModelWithHolder<FavoriteModel.MovieViewHolder>() {
+
+    @EpoxyAttribute
+    lateinit var title: String
+
+    @EpoxyAttribute
+    lateinit var posterUrl: String
+
+    @EpoxyAttribute
+    lateinit var genres: List<String>
+
+    @EpoxyAttribute
+    lateinit var year: String
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var clickListener: View.OnClickListener
+
+    @EpoxyAttribute
+    lateinit var transitionName: String
+
+    @EpoxyAttribute
+    var movieId: Int? = null
+
+    @EpoxyAttribute
+    lateinit var glide: RequestManager
+
+    override fun bind(holder: MovieViewHolder) {
+        super.bind(holder)
+        holder.txtTitle.text = title
+        holder.txtYear.text = year
+        if (genres.isNotEmpty()) {
+            var text = ""
+            genres.mapIndexed { idx, t ->
+                text += if (idx != genres.size - 1) "$t, " else t
+            }
+            holder.txtGenres.text = text
+        } else {
+            holder.txtGenres.gone()
+        }
+        glide.load(posterUrl)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .apply {
+                RequestOptions()
+//                    .placeholder(R.drawable.ic_round_local_movies_24px)
+//                    .error(R.drawable.ic_round_local_movies_24px)
+//                    .fallback(R.drawable.ic_round_local_movies_24px)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            }
+            .into(holder.imgMovie)
+        ViewCompat.setTransitionName(holder.imgMovie, transitionName)
+        holder.imgMovie.setOnClickListener(clickListener)
+    }
+
+    inner class MovieViewHolder : KotlinEpoxyHolder(), KoinComponent {
+        val imgMovie by bind<ImageView>(R.id.img_movie)
+        val txtTitle by bind<TextView>(R.id.txt_title)
+        val txtGenres by bind<TextView>(R.id.txt_genres)
+        val txtYear by bind<TextView>(R.id.txt_year)
+    }
+}
+
 @EpoxyModelClass(layout = R.layout.item_cast)
 abstract class CastModel : EpoxyModelWithHolder<CastModel.ActorHolder>() {
 

@@ -112,4 +112,30 @@ class CollectionsRepository internal constructor(
             }
         }
     }
+
+    fun getFavoriteCollectionFlowable(): NetworkBoundResource<List<Movie>> {
+        return object : NetworkBoundResource<List<Movie>>() {
+            override fun fetchFromNetwork(): Flowable<Resource<List<Movie>>> {
+                return fetchFromDatabase()
+            }
+
+            override fun fetchFromDatabase(): Flowable<Resource<List<Movie>>> {
+                return localCollectionsSource.getCollectionFlowable(CollectionType.Favourite)
+                    .switchMap { collection ->
+                        localCollectionsSource.getMoviesForCollectionFlowable(collection.contents)
+                    }
+                    .map { moviesInCollection ->
+                        Resource.Success(moviesInCollection)
+                    }
+            }
+
+            override fun shouldRefresh(): Single<Boolean> {
+                return Single.just(false)
+            }
+
+            override fun saveToDatabase(movies: List<Movie>) {
+                return localMoviesResource.saveMoviesToDatabase(movies)
+            }
+        }
+    }
 }

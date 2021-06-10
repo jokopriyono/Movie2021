@@ -12,6 +12,8 @@ import com.joko.movie2021.R
 import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.ui.UIState
 import com.joko.movie2021.ui.common.EpoxyCallbacks
+import com.joko.movie2021.ui.favorite.FavoriteEpoxyController
+import com.joko.movie2021.ui.favorite.FavoriteViewModel
 import com.joko.movie2021.ui.main.HomeEpoxyController
 import com.joko.movie2021.ui.main.HomeViewModel
 import com.joko.movie2021.ui.main.MainViewModel
@@ -44,6 +46,9 @@ val uiModule = module {
     viewModel { (initialState: UIState.PopularScreenState) ->
         PopularViewModel(get(), initialState)
     }
+    viewModel { (initialState: UIState.FavoriteScreenState) ->
+        FavoriteViewModel(get(), initialState)
+    }
     viewModel { MainViewModel(get()) }
 
     factory(named("fragment-glide-request-manager")) { (fragment: Fragment) ->
@@ -64,6 +69,10 @@ val uiModule = module {
 
     factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
         PopularEpoxyController(callbacks, glide, get(named("epoxy-handler")))
+    }
+
+    factory { (callbacks: EpoxyCallbacks, glide: RequestManager) ->
+        FavoriteEpoxyController(callbacks, glide, get(named("epoxy-handler")))
     }
 
     single(named("epoxy-handler-thread")) {
