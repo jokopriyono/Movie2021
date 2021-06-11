@@ -6,7 +6,9 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.joko.movie2021.repository.collections.CollectionNames.FAVOURITES_NAME
 import com.joko.movie2021.repository.collections.CollectionNames.IN_THEATRES_NAME
+import com.joko.movie2021.repository.collections.CollectionNames.NOW_PLAYING
 import com.joko.movie2021.repository.collections.CollectionNames.POPULAR_NAME
+import com.joko.movie2021.repository.collections.CollectionNames.TOP_RATED
 import com.joko.movie2021.repository.collections.CollectionNames.UPCOMING_NAME
 import com.joko.movie2021.repository.collections.CollectionNames.WATCHLIST_NAME
 import com.joko.movie2021.repository.movies.Movie
@@ -27,6 +29,8 @@ object CollectionNames {
     const val WATCHLIST_NAME = "watchlist"
     const val POPULAR_NAME = "popular"
     const val UPCOMING_NAME = "upcoming"
+    const val TOP_RATED = "top-rated"
+    const val NOW_PLAYING = "now-playing"
     const val IN_THEATRES_NAME = "in-theatres"
 }
 
@@ -35,5 +39,7 @@ sealed class CollectionType(val name: String) {
     object Watchlist : CollectionType(WATCHLIST_NAME)
     object Popular : CollectionType(POPULAR_NAME)
     object Upcoming : CollectionType(UPCOMING_NAME)
+    object TopRated : CollectionType(TOP_RATED)
+    object NowPlaying : CollectionType(NOW_PLAYING)
     object InTheatres : CollectionType(IN_THEATRES_NAME)
 }

@@ -59,12 +59,22 @@ class HomeFragment :
         parametersOf(callbacks, glideRequestManager, CollectionType.Upcoming)
     }
 
+    private val topRatedEpoxyController: HomeEpoxyController by inject {
+        parametersOf(callbacks, glideRequestManager, CollectionType.TopRated)
+    }
+
+    private val nowPlayingEpoxyController: HomeEpoxyController by inject {
+        parametersOf(callbacks, glideRequestManager, CollectionType.NowPlaying)
+    }
+
     private val onDestroyView: PublishRelay<Unit> = PublishRelay.create()
 
     override val initialState: UIState by lazy {
         UIState.HomeScreenState(
             popularMoviesResource = Resource.Loading(),
             upcomingMoviesResource = Resource.Loading(),
+            topRatedMoviesResource = Resource.Loading(),
+            nowPlayingMoviesResource = Resource.Loading(),
             searchResultsResource = null
         )
     }
@@ -86,6 +96,8 @@ class HomeFragment :
 
             forceRefreshCollection(CollectionType.Popular)
             forceRefreshCollection(CollectionType.Upcoming)
+            forceRefreshCollection(CollectionType.TopRated)
+            forceRefreshCollection(CollectionType.NowPlaying)
         }
         mainViewModel.setBackPressListener(this)
     }
@@ -117,6 +129,12 @@ class HomeFragment :
         recycler_coming.apply {
             setController(upcomingEpoxyController)
         }
+        recycler_top_rated.apply {
+            setController(topRatedEpoxyController)
+        }
+        recycler_now_playing.apply {
+            setController(nowPlayingEpoxyController)
+        }
         (view.parent as ViewGroup).doOnPreDraw {
             startPostponedEnterTransition()
         }
@@ -134,6 +152,8 @@ class HomeFragment :
     override fun renderState(state: UIState.HomeScreenState) {
         popularEpoxyController.setData(state)
         upcomingEpoxyController.setData(state)
+        topRatedEpoxyController.setData(state)
+        nowPlayingEpoxyController.setData(state)
     }
 
     override fun onDestroyView() {

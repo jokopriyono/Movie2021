@@ -13,4 +13,6 @@
     <string name="hd">HD</string>
     <string name="add_to_favorite">Add to Favorite</string>
     <string name="favorite_movie">Favorite Movie</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="now_playing">Now Playing</string>
 </resources>

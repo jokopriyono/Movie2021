@@ -18,6 +18,8 @@ internal class LocalCollectionsSource(
             CollectionType.Popular -> collectionsDao.getPopularMoviesFlowable()
             CollectionType.Upcoming -> collectionsDao.getUpcomingMoviesFlowable()
             CollectionType.InTheatres -> collectionsDao.getMoviesInTheatresFlowable()
+            CollectionType.TopRated -> collectionsDao.getTopRatedMoviesFlowable()
+            CollectionType.NowPlaying -> collectionsDao.getNowPlayingMoviesFlowable()
         }
     }
 
@@ -28,6 +30,8 @@ internal class LocalCollectionsSource(
             CollectionType.Popular -> collectionsDao.getPopularMovies()
             CollectionType.Upcoming -> collectionsDao.getUpcomingMovies()
             CollectionType.InTheatres -> collectionsDao.getMoviesInTheatres()
+            CollectionType.TopRated -> collectionsDao.getTopRatedMovies()
+            CollectionType.NowPlaying -> collectionsDao.getNowPlayingMovies()
         }
     }
 

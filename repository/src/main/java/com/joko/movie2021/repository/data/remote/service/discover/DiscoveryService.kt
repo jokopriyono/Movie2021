@@ -35,4 +35,7 @@ internal interface DiscoveryService {
     @GET("movie/upcoming")
     fun getUpcomingMovies(): Deferred<NetworkResponse<DiscoverMoviesResponse, ErrorResponse>>
 
+    @GET("movie/now_playing")
+    fun getNowPlayingMovies(): Deferred<NetworkResponse<DiscoverMoviesResponse, ErrorResponse>>
+
 }

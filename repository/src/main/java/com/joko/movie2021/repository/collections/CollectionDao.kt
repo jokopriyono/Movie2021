@@ -38,6 +38,18 @@ internal interface CollectionDao {
     @Query("SELECT * FROM collections WHERE name = '${CollectionNames.IN_THEATRES_NAME}'")
     fun getMoviesInTheatres(): Single<Collection>
 
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.TOP_RATED}'")
+    fun getTopRatedMoviesFlowable(): Flowable<Collection>
+
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.TOP_RATED}'")
+    fun getTopRatedMovies(): Single<Collection>
+
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.NOW_PLAYING}'")
+    fun getNowPlayingMoviesFlowable(): Flowable<Collection>
+
+    @Query("SELECT * FROM collections WHERE name = '${CollectionNames.NOW_PLAYING}'")
+    fun getNowPlayingMovies(): Single<Collection>
+
     @Query("SELECT COUNT(*) FROM collections WHERE name = :name")
     fun isCollectionInDatabase(name: String): Single<Int>
 

@@ -29,8 +29,10 @@ class HomeViewModel(
         get() = _message
 
     init {
-        getPopularMovies()
-        getUpcomingMovies()
+        getMovies(CollectionType.Popular)
+        getMovies(CollectionType.Upcoming)
+        getMovies(CollectionType.TopRated)
+        getMovies(CollectionType.NowPlaying)
     }
 
     fun checkFavoriteMovies() {
@@ -47,29 +49,30 @@ class HomeViewModel(
             .disposeWith(compositeDisposable)
     }
 
-    private fun getPopularMovies() {
-        collectionsRepository.getCollectionFlowable(type = CollectionType.Popular)
+    private fun getMovies(collectionType: CollectionType) {
+        collectionsRepository.getCollectionFlowable(type = collectionType)
             .init(compositeDisposable)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
-                onNext = { popularMovies ->
-                    setState { copy(popularMoviesResource = popularMovies) }
+                onNext = { movies ->
+                    when (collectionType) {
+                        CollectionType.Popular -> {
+                            setState { copy(popularMoviesResource = movies) }
+                        }
+                        CollectionType.Upcoming -> {
+                            setState { copy(upcomingMoviesResource = movies) }
+                        }
+                        CollectionType.TopRated -> {
+                            setState { copy(topRatedMoviesResource = movies) }
+                        }
+                        CollectionType.NowPlaying -> {
+                            checkFavoriteMovies()
+                            setState { copy(nowPlayingMoviesResource = movies) }
+                        }
+                        else -> Unit
+                    }
                 },
-                onError = { error -> handleError(error, "get-popular-movies") }
-            )
-            .disposeWith(compositeDisposable)
-    }
-
-    private fun getUpcomingMovies() {
-        collectionsRepository.getCollectionFlowable(type = CollectionType.Upcoming)
-            .init(compositeDisposable)
-            .subscribeOn(Schedulers.io())
-            .subscribeBy(
-                onNext = { upcomingMovies ->
-                    checkFavoriteMovies()
-                    setState { copy(upcomingMoviesResource = upcomingMovies) }
-                },
-                onError = { error -> handleError(error, "get-upcoming-movies") }
+                onError = { error -> handleError(error, "get-${collectionType.name}-movies") }
             )
             .disposeWith(compositeDisposable)
     }

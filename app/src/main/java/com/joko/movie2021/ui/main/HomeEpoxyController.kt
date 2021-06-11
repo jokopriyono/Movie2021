@@ -23,8 +23,9 @@ class HomeEpoxyController(
             when (type) {
                 CollectionType.Popular -> buildHomeModel(popularMoviesResource)
                 CollectionType.Upcoming -> buildHomeModel(upcomingMoviesResource)
-                else -> {
-                }
+                CollectionType.TopRated -> buildHomeModel(topRatedMoviesResource)
+                CollectionType.NowPlaying -> buildHomeModel(nowPlayingMoviesResource)
+                else -> Unit
             }
         }
     }
