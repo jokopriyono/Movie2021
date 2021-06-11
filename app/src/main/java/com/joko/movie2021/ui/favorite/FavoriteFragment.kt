@@ -8,6 +8,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
 import com.joko.movie2021.R
 import com.joko.movie2021.core.Resource
@@ -19,6 +20,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
+import java.util.concurrent.TimeUnit
 
 class FavoriteFragment : BaseFragment(), MVRxLiteView<UIState.FavoriteScreenState> {
 
@@ -50,7 +52,7 @@ class FavoriteFragment : BaseFragment(), MVRxLiteView<UIState.FavoriteScreenStat
     private val onDestroyView: PublishRelay<Unit> = PublishRelay.create()
 
     override val initialState: UIState by lazy {
-        UIState.FavoriteScreenState(favoriteMoviesResource = Resource.Loading())
+        UIState.FavoriteScreenState(favoriteMoviesResource = Resource.Loading(), "")
     }
 
     private val favoriteViewModel: FavoriteViewModel by viewModel {
@@ -81,6 +83,20 @@ class FavoriteFragment : BaseFragment(), MVRxLiteView<UIState.FavoriteScreenStat
             layoutManager = LinearLayoutManager(context)
             setController(favoriteEpoxyController)
         }
+        setupSearchBox()
+        // To make sure the search box does not have focus
+        getView()?.requestFocus()
+    }
+
+    private fun setupSearchBox() {
+        edt_search.textChanges()
+            .debounce(300, TimeUnit.MILLISECONDS)
+            .map { text -> text.toString() }
+            .takeUntil(onDestroyView)
+            .doOnNext { query ->
+                favoriteViewModel.getSearchResultsForQuery(query)
+            }
+            .subscribe()
     }
 
     override fun renderState(state: UIState.FavoriteScreenState) {

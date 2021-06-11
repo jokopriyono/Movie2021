@@ -38,6 +38,17 @@ class CollectionsRepository internal constructor(
             }
     }
 
+    fun searchFavoriteCollectionFlowable(query: String): Flowable<Resource.Success<List<Movie>>> {
+        return localCollectionsSource.getCollectionFlowable(CollectionType.Favourite)
+            .switchMap {
+                localCollectionsSource.getMoviesForCollectionFlowable(it.contents)
+            }
+            .map {
+                val filter = it.filter { movie -> movie.title.contains(query, true) }
+                Resource.Success(filter)
+            }
+    }
+
     /**
      * This method should be used with care because the upstream observables it is working on may not emit onComplete,
      * and the downstream might suffer because of it

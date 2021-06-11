@@ -12,6 +12,7 @@ import com.joko.movie2021.repository.collections.CollectionsRepository
 import com.joko.movie2021.ui.UIState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
@@ -22,6 +23,7 @@ class FavoriteViewModel(
     initialState: UIState.FavoriteScreenState
 ) : MVRxLiteViewModel<UIState.FavoriteScreenState>(initialState) {
     private val compositeDisposable = CompositeDisposable()
+    private var currentQuery: Disposable? = null
     private val _message = MutableLiveData<String>()
 
     val message: LiveData<String>
@@ -79,5 +81,22 @@ class FavoriteViewModel(
                     .disposeWith(compositeDisposable)
             }
         }
+    }
+
+    fun getSearchResultsForQuery(query: String) {
+        currentQuery?.dispose()
+        currentQuery = collectionsRepository.searchFavoriteCollectionFlowable(query)
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                { searchResults ->
+                    setState {
+                        copy(favoriteMoviesResource = searchResults, lastQuery = query)
+                    }
+                },
+                { error ->
+                    handleError(error, "get-search-results")
+                }
+            )
+        currentQuery?.disposeWith(compositeDisposable)
     }
 }

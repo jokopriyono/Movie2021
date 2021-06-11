@@ -33,6 +33,7 @@ sealed class UIState : MVRxLiteState {
     ) : UIState()
 
     data class FavoriteScreenState(
-        val favoriteMoviesResource: Resource<List<Movie>>
+        val favoriteMoviesResource: Resource<List<Movie>>,
+        var lastQuery: String?
     ) : UIState()
 }
