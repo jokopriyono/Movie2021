@@ -123,7 +123,7 @@ val repositoryModule = module {
     single { LocalActorsSource(get()) }
     single { RemoteActorsSource(get()) }
     single { LocalCollectionsSource(get(), get()) }
-    single { RemoteCollectionsSource(get(), get()) }
+    single { RemoteCollectionsSource(get()) }
 
     single { MoviesRepository(get(), get()) }
     single { ActorsRepository(get(), get()) }

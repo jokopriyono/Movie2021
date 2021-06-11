@@ -34,13 +34,13 @@ class HomeEpoxyController(
         when (movies) {
             is Resource.Success -> {
                 val showTenOnly = movies.data.subList(0, 10)
-                showTenOnly.forEach { popularMovie ->
+                showTenOnly.forEach { movie ->
                     movie {
-                        id(popularMovie.id)
-                        movieId(popularMovie.id)
+                        id(movie.id)
+                        movieId(movie.id)
                         glide(glide)
-                        posterUrl(popularMovie.posterPath)
-                        transitionName("poster-${popularMovie.id}")
+                        posterUrl(movie.posterPath)
+                        transitionName("poster-${movie.id}")
                         clickListener { model, _, clickedView, _ ->
                             callbacks.onMovieItemClicked(
                                 model.movieId!!,

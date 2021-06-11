@@ -11,6 +11,7 @@ import com.joko.movie2021.repository.movies.MovieTrailer
 sealed class UIState : MVRxLiteState {
 
     data class HomeScreenState(
+        val inTheaterMoviesResource: Resource<List<Movie>>,
         val popularMoviesResource: Resource<List<Movie>>,
         val upcomingMoviesResource: Resource<List<Movie>>,
         val topRatedMoviesResource: Resource<List<Movie>>,

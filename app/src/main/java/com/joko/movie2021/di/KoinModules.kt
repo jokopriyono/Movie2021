@@ -38,7 +38,7 @@ val applicationModule = module {
 val uiModule = module {
 
     viewModel { (initialState: UIState.HomeScreenState) ->
-        HomeViewModel(get(), get(), initialState)
+        HomeViewModel(get(), initialState)
     }
     viewModel { (movieId: Int, initialState: UIState.DetailsScreenState) ->
         MovieDetailViewModel(movieId, get(), get(), initialState)

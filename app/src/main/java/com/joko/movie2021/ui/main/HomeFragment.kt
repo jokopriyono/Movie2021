@@ -35,7 +35,6 @@ class HomeFragment :
 
     private val callbacks = object : EpoxyCallbacks {
         override fun onMovieItemClicked(id: Int, transitionName: String, sharedView: View?) {
-            // TODO item clicked
             val action = HomeFragmentDirections.viewMovieDetails(
                 movieIdArg = id,
                 transitionNameArg = transitionName
@@ -71,6 +70,7 @@ class HomeFragment :
 
     override val initialState: UIState by lazy {
         UIState.HomeScreenState(
+            inTheaterMoviesResource = Resource.Loading(),
             popularMoviesResource = Resource.Loading(),
             upcomingMoviesResource = Resource.Loading(),
             topRatedMoviesResource = Resource.Loading(),
@@ -94,6 +94,7 @@ class HomeFragment :
 
             state.observe(viewLifecycleOwner, { renderState(it) })
 
+            forceRefreshCollection(CollectionType.InTheatres)
             forceRefreshCollection(CollectionType.Popular)
             forceRefreshCollection(CollectionType.Upcoming)
             forceRefreshCollection(CollectionType.TopRated)
@@ -154,6 +155,14 @@ class HomeFragment :
         upcomingEpoxyController.setData(state)
         topRatedEpoxyController.setData(state)
         nowPlayingEpoxyController.setData(state)
+        if (state.inTheaterMoviesResource is Resource.Success) {
+            context?.let { context ->
+                val sliderAdapter = SliderAdapter(
+                    context, state.inTheaterMoviesResource.data, glideRequestManager, callbacks
+                )
+                slider.adapter = sliderAdapter
+            }
+        }
     }
 
     override fun onDestroyView() {

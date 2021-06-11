@@ -7,7 +7,6 @@ import com.joko.movie2021.core.extensions.log
 import com.joko.movie2021.mvrxlite.MVRxLiteViewModel
 import com.joko.movie2021.repository.collections.CollectionType
 import com.joko.movie2021.repository.collections.CollectionsRepository
-import com.joko.movie2021.repository.movies.MoviesRepository
 import com.joko.movie2021.ui.UIState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +17,6 @@ import java.util.concurrent.TimeoutException
 
 class HomeViewModel(
     private val collectionsRepository: CollectionsRepository,
-    private val moviesRepository: MoviesRepository,
     initialState: UIState.HomeScreenState
 ) : MVRxLiteViewModel<UIState.HomeScreenState>(initialState) {
 
@@ -29,6 +27,7 @@ class HomeViewModel(
         get() = _message
 
     init {
+        getMovies(CollectionType.InTheatres)
         getMovies(CollectionType.Popular)
         getMovies(CollectionType.Upcoming)
         getMovies(CollectionType.TopRated)
@@ -56,6 +55,9 @@ class HomeViewModel(
             .subscribeBy(
                 onNext = { movies ->
                     when (collectionType) {
+                        CollectionType.InTheatres -> {
+                            setState { copy(inTheaterMoviesResource = movies) }
+                        }
                         CollectionType.Popular -> {
                             setState { copy(popularMoviesResource = movies) }
                         }
